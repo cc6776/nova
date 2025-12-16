@@ -51,6 +51,26 @@ def main():
     
     # 5. 解析响应
     response_body = json.loads(response.get("body").read())
+    
+    # 调试：打印完整响应
+    print(f"\n📋 完整响应:")
+    print(json.dumps(response_body, indent=2, ensure_ascii=False))
+    
+    # 检查响应结构
+    if "embeddings" not in response_body:
+        print(f"\n❌ 错误: 响应中没有 'embeddings' 字段")
+        print(f"响应内容: {response_body}")
+        return
+    
+    if len(response_body["embeddings"]) == 0:
+        print(f"\n❌ 错误: embeddings 数组为空")
+        return
+    
+    if "embedding" not in response_body["embeddings"][0]:
+        print(f"\n❌ 错误: 第一个 embedding 对象中没有 'embedding' 字段")
+        print(f"可用字段: {response_body['embeddings'][0].keys()}")
+        return
+    
     embedding = response_body["embeddings"][0]["embedding"]
     
     # 6. 输出结果
